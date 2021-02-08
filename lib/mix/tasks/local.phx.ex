@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Local.Phx do
+defmodule Mix.Tasks.Local.Petal do
   use Mix.Task
 
   @shortdoc "Updates the Phoenix project generator locally"
@@ -6,13 +6,13 @@ defmodule Mix.Tasks.Local.Phx do
   @moduledoc """
   Updates the Phoenix project generator locally.
 
-      mix local.phx
+      mix local.petal
 
-  Accepts the same command line options as `archive.install hex phx_new`.
+  Accepts the same command line options as `archive.install hex petal_new`.
   """
 
   @impl true
   def run(args) do
-    Mix.Task.run("archive.install", ["hex", "phx_new" | args])
+    Mix.Task.run("archive.install", ["hex", "petal_new" | args])
   end
 end

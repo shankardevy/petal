@@ -1,0 +1,11 @@
+<main role="main" class="container">
+  <p class="alert alert-info" role="alert"
+    petal-click="lv:clear-flash"
+    petal-value-key="info"><%%= live_flash(@flash, :info) %></p>
+
+  <p class="alert alert-danger" role="alert"
+    petal-click="lv:clear-flash"
+    petal-value-key="error"><%%= live_flash(@flash, :error) %></p>
+
+  <%%= @inner_content %>
+</main>
