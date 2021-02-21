@@ -12,9 +12,6 @@ defmodule Mix.Tasks.Petal.New do
 
   ## Options
 
-    * `--live` - include Phoenix.LiveView to make it easier than ever
-      to build interactive, real-time applications
-
     * `--umbrella` - generate an umbrella project,
       with one application for your domain, and
       a second application for the web interface.
@@ -108,7 +105,7 @@ defmodule Mix.Tasks.Petal.New do
              app: :string, module: :string, web_module: :string,
              database: :string, binary_id: :boolean, html: :boolean,
              gettext: :boolean, umbrella: :boolean, verbose: :boolean,
-             live: :boolean, dashboard: :boolean, install: :boolean]
+             dashboard: :boolean, install: :boolean]
 
   @impl true
   def run([version]) when version in ~w(-v --version) do

@@ -76,15 +76,11 @@ defmodule Petal.New.Web do
   def generate(%Project{} = project) do
     inject_umbrella_config_defaults(project)
 
-    if Project.live?(project), do: Petal.New.Single.assert_live_switches!(project)
+    Petal.New.Single.assert_live_switches!(project)
 
     copy_from project, __MODULE__, :new
 
-    cond do
-      Project.live?(project) -> gen_live(project)
-      Project.html?(project) -> gen_html(project)
-      true -> :noop
-    end
+    copy_from project, __MODULE__, :live
 
     if Project.gettext?(project), do: gen_gettext(project)
 
@@ -97,15 +93,8 @@ defmodule Petal.New.Web do
     project
   end
 
-  defp gen_html(%Project{} = project) do
-    copy_from project, __MODULE__, :html
-  end
-
   defp gen_gettext(%Project{} = project) do
     copy_from project, __MODULE__, :gettext
   end
 
-  defp gen_live(%Project{} = project) do
-    copy_from project, __MODULE__, :live
-  end
 end

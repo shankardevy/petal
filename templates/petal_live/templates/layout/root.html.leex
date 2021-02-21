@@ -10,21 +10,23 @@
     <script defer petal-track-static type="text/javascript" src="<%%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if @dashboard do %><%%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <%% end %><% end %>
-          </ul>
-        </nav>
-        <a href="https://phoenixframework.org/" class="petal-logo">
-          <img src="<%%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
-    </header>
+    <nav class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex px-2 lg:px-0">
+            <div class="flex-shrink-0 flex items-center">
+                Petal
+            </div>
+            <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
+              <a href="#" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                Home
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <%%= @inner_content %>
   </body>
 </html>

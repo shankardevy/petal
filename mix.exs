@@ -6,7 +6,7 @@ end
 defmodule Petal.New.MixProject do
   use Mix.Project
 
-  @version "0.0.1"
+  @version "1.5.7"
   @url "https://github.com/shankardevy/petal_new"
 
   def project do

@@ -40,9 +40,9 @@ defmodule <%= @app_module %>.MixProject do
       <%= @phoenix_dep %>,<%= if @ecto do %>
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.5"},
-      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %><%= if @html do %><%= if @live do %>
+      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %><%= if @html do %>
       {:phoenix_live_view, "~> 0.15.0"},
-      {:floki, ">= 0.27.0", only: :test},<% end %>
+      {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},<% end %><%= if @dashboard do %>
       {:phoenix_live_dashboard, "~> 0.4"},<% end %>

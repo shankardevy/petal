@@ -40,7 +40,7 @@ defmodule <%= @web_namespace %> do
       # Include shared imports and aliases for views
       unquote(view_helpers())
     end
-  end<%= if @live do %>
+  end
 
   def live_view do
     quote do
@@ -57,15 +57,15 @@ defmodule <%= @web_namespace %> do
 
       unquote(view_helpers())
     end
-  end<% end %>
+  end
 
   def router do
     quote do
       use Phoenix.Router
 
       import Plug.Conn
-      import Phoenix.Controller<%= if @live do %>
-      import Phoenix.LiveView.Router<% end %>
+      import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
@@ -79,10 +79,10 @@ defmodule <%= @web_namespace %> do
   defp view_helpers do
     quote do<%= if @html do %>
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML<%= if @live do %>
+      use Phoenix.HTML
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers<% end %>
+      import Phoenix.LiveView.Helpers
 <% end %>
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View

@@ -12,13 +12,28 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
-<%= if @html do %>import "phoenix_html"<% end %><%= if @live do %>
+<%= if @html do %>import "phoenix_html"<% end %>
 import {Socket} from "phoenix"
 import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
+import "alpinejs"
+
+// Phoenix LiveView Hooks
+let Hooks = {}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+let liveSocket = new LiveSocket('/live', Socket, {
+  dom: {
+    onBeforeElUpdated(from, to){
+      if(from.__x){ Alpine.clone(from.__x, to) }
+    }
+  },
+  params: {
+    _csrf_token: csrfToken
+  },
+  hooks: Hooks
+})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
@@ -33,4 +48,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-<% end %>

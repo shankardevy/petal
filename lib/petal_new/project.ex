@@ -43,9 +43,7 @@ defmodule Petal.New.Project do
     Keyword.fetch!(binding, :gettext)
   end
 
-  def live?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :live)
-  end
+  def live?(%Project{binding: binding}), do: true
 
   def dashboard?(%Project{binding: binding}) do
     Keyword.fetch!(binding, :dashboard)

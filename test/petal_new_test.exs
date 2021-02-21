@@ -118,7 +118,6 @@ defmodule Mix.Tasks.Petal.NewTest do
       assert_file "petal_blog/assets/static/favicon.ico"
       assert_file "petal_blog/assets/static/images/phoenix.png"
       assert_file "petal_blog/assets/css/app.scss"
-      assert_file "petal_blog/assets/css/phoenix.css"
       assert_file "petal_blog/assets/js/app.js",
                   ~s[import socket from "./socket"]
       assert_file "petal_blog/assets/js/socket.js",
@@ -130,7 +129,6 @@ defmodule Mix.Tasks.Petal.NewTest do
       end
 
       refute File.exists? "petal_blog/priv/static/css/app.scss"
-      refute File.exists? "petal_blog/priv/static/css/phoenix.css"
       refute File.exists? "petal_blog/priv/static/js/phoenix.js"
       refute File.exists? "petal_blog/priv/static/js/app.js"
 
@@ -226,7 +224,6 @@ defmodule Mix.Tasks.Petal.NewTest do
 
       # No webpack & No HTML
       refute_file "petal_blog/priv/static/css/app.css"
-      refute_file "petal_blog/priv/static/css/phoenix.css"
       refute_file "petal_blog/priv/static/favicon.ico"
       refute_file "petal_blog/priv/static/images/phoenix.png"
       refute_file "petal_blog/priv/static/js/phoenix.js"
@@ -360,7 +357,6 @@ defmodule Mix.Tasks.Petal.NewTest do
       assert_file "petal_blog/.gitignore"
       assert_file "petal_blog/.gitignore", ~r/\n$/
       assert_file "petal_blog/priv/static/css/app.css"
-      assert_file "petal_blog/priv/static/css/phoenix.css"
       assert_file "petal_blog/priv/static/favicon.ico"
       assert_file "petal_blog/priv/static/images/phoenix.png"
       assert_file "petal_blog/priv/static/js/phoenix.js"

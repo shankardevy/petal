@@ -78,6 +78,8 @@ defmodule Petal.New.Single do
   ]
 
   template :webpack_live, [
+    {:eex,  "petal_assets/tailwind.config.js", :web, "assets/tailwind.config.js"},
+    {:eex,  "petal_assets/postcss.config.js", :web, "assets/postcss.config.js"},
     {:eex,  "petal_assets/webpack.config.js", :web, "assets/webpack.config.js"},
     {:text, "petal_assets/babelrc",           :web, "assets/.babelrc"},
     {:eex,  "petal_assets/app.js",            :web, "assets/js/app.js"},
@@ -91,7 +93,6 @@ defmodule Petal.New.Single do
   template :static, [
     {:text, "petal_static/app.js",      :web, "priv/static/js/app.js"},
     {:text, "petal_static/app.css",     :web, "priv/static/css/app.css"},
-    {:text, "petal_static/phoenix.css", :web, "priv/static/css/phoenix.css"},
     {:text, "petal_static/robots.txt",  :web, "priv/static/robots.txt"},
     {:text, "petal_static/phoenix.js",  :web, "priv/static/js/phoenix.js"},
     {:text, "petal_static/phoenix.png", :web, "priv/static/images/phoenix.png"},
@@ -126,24 +127,18 @@ defmodule Petal.New.Single do
   end
 
   def generate(%Project{} = project) do
-    if Project.live?(project), do: assert_live_switches!(project)
+    assert_live_switches!(project)
 
     copy_from project, __MODULE__, :new
 
     if Project.ecto?(project), do: gen_ecto(project)
 
-    cond do
-      Project.live?(project) -> gen_live(project)
-      Project.html?(project) -> gen_html(project)
-      true -> :noop
-    end
+    copy_from project, __MODULE__, :live
 
     if Project.gettext?(project), do: gen_gettext(project)
 
     case {Project.webpack?(project), Project.html?(project)} do
       {true, _}      -> gen_webpack(project)
-      {false, true}  -> gen_static(project)
-      {false, false} -> gen_bare(project)
     end
 
     project
@@ -157,10 +152,6 @@ defmodule Petal.New.Single do
     copy_from project, __MODULE__, :gettext
   end
 
-  defp gen_live(project) do
-    copy_from project, __MODULE__, :live
-  end
-
   def gen_ecto(project) do
     copy_from project, __MODULE__, :ecto
     gen_ecto_config(project)
@@ -171,14 +162,9 @@ defmodule Petal.New.Single do
   end
 
   def gen_webpack(%Project{web_path: web_path} = project) do
-    if Project.live?(project) do
-      copy_from project, __MODULE__, :webpack_live
-    else
-      copy_from project, __MODULE__, :webpack
-    end
+    copy_from project, __MODULE__, :webpack_live
 
     statics = %{
-      "petal_static/phoenix.css" => "assets/css/phoenix.css",
       "petal_static/robots.txt" => "assets/static/robots.txt",
       "petal_static/phoenix.png" => "assets/static/images/phoenix.png",
       "petal_static/favicon.ico" => "assets/static/favicon.ico"
