@@ -35,22 +35,12 @@ defmodule Petal.New.Project do
     Keyword.fetch!(binding, :ecto)
   end
 
-  def html?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :html)
-  end
-
   def gettext?(%Project{binding: binding}) do
     Keyword.fetch!(binding, :gettext)
   end
 
-  def live?(%Project{binding: binding}), do: true
-
   def dashboard?(%Project{binding: binding}) do
     Keyword.fetch!(binding, :dashboard)
-  end
-
-  def webpack?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :webpack)
   end
 
   def verbose?(%Project{opts: opts}) do

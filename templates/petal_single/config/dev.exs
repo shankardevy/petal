@@ -13,7 +13,7 @@ config :<%= @app_name %>, <%= @endpoint_module %>,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: <%= if @webpack do %>[
+  watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",
@@ -21,7 +21,7 @@ config :<%= @app_name %>, <%= @endpoint_module %>,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
-  ]<% else %>[]<% end %>
+  ]
 
 # ## SSL Support
 #
@@ -45,7 +45,7 @@ config :<%= @app_name %>, <%= @endpoint_module %>,
 #
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
-# different ports.<%= if @html do %>
+# different ports.
 
 # Watch static and templates for browser reloading.
 config :<%= @app_name %>, <%= @endpoint_module %>,
@@ -56,7 +56,7 @@ config :<%= @app_name %>, <%= @endpoint_module %>,
       ~r"lib/<%= @lib_web_name %>/(live|views)/.*(ex)$",
       ~r"lib/<%= @lib_web_name %>/templates/.*(eex)$"
     ]
-  ]<% end %>
+  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

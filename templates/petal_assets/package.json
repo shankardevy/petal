@@ -6,8 +6,8 @@
   },
   "dependencies": {
     "alpinejs": "^2.8.0",
-    "phoenix": "file:<%= @phoenix_webpack_path %>"<%= if @html do %>,
-    "phoenix_html": "file:<%= @phoenix_html_webpack_path %>"<% end %>,
+    "phoenix": "file:<%= @phoenix_webpack_path %>",
+    "phoenix_html": "file:<%= @phoenix_html_webpack_path %>",
     "phoenix_live_view": "file:<%= @phoenix_live_view_webpack_path %>",
     "topbar": "^0.1.4"
   },

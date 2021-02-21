@@ -19,17 +19,6 @@ defmodule Mix.Tasks.Petal.New.WebTest do
            "Creates a new Phoenix web project within an umbrella project."
   end
 
-  test "new with barebones umbrella" do
-    in_tmp_umbrella_project "new with barebones umbrella", fn ->
-      files = ~w[../config/dev.exs ../config/test.exs ../config/prod.exs ../config/runtime.exs]
-      Enum.each(files, &File.rm/1)
-
-      assert_file "../config/config.exs", &refute(&1 =~ ~S[import_config "#{config_env()}.exs"])
-      Mix.Tasks.Petal.New.Web.run([@app_name])
-      assert_file "../config/config.exs", &assert(&1 =~ ~S[import_config "#{config_env()}.exs"])
-    end
-  end
-
   test "new outside umbrella", config do
     in_tmp config.test, fn ->
       assert_raise Mix.Error, ~r"The web task can only be run within an umbrella's apps directory", fn ->

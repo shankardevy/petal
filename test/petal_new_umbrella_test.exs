@@ -225,80 +225,6 @@ defmodule Mix.Tasks.Petal.New.UmbrellaTest do
     end
   end
 
-  test "new without defaults" do
-    in_tmp "new without defaults", fn ->
-      Mix.Tasks.Petal.New.run([@app, "--umbrella", "--no-html", "--no-webpack", "--no-ecto", "--no-live"])
-
-      # No webpack
-      assert_file web_path(@app, ".gitignore"), fn file ->
-        assert file =~ ~r/\n$/
-        refute file =~ "/assets/node_modules/"
-      end
-
-      assert_file root_path(@app, "config/dev.exs"), ~r/watchers: \[\]/
-
-      # No webpack & No HTML
-      refute_file web_path(@app, "priv/static/css/app.css")
-      refute_file web_path(@app, "priv/static/favicon.ico")
-      refute_file web_path(@app, "priv/static/images/phoenix.png")
-      refute_file web_path(@app, "priv/static/js/phoenix.js")
-      refute_file web_path(@app, "priv/static/js/app.js")
-
-      # No Ecto
-      config = ~r/config :petal_umb, PetalUmb.Repo,/
-      refute File.exists?(app_path(@app, "lib/#{@app}_web/repo.ex"))
-
-      assert_file app_path(@app, "mix.exs"), &refute(&1 =~ ~r":phoenix_ecto")
-
-      assert_file root_path(@app, "config/config.exs"), fn file ->
-        refute file =~ "config :petal_blog_web, :generators"
-        refute file =~ "ecto_repos:"
-      end
-
-      assert_file web_path(@app, "lib/#{@app}_web/telemetry.ex"), fn file ->
-        refute file =~ "# Database Metrics"
-        refute file =~ "summary(\"petal_umb.repo.query.total_time\","
-      end
-
-      assert_file root_path(@app, "config/dev.exs"), &refute(&1 =~ config)
-      assert_file root_path(@app, "config/test.exs"), &refute(&1 =~ config)
-      assert_file root_path(@app, "config/runtime.exs"), &refute(&1 =~ config)
-
-      assert_file app_path(@app, "lib/#{@app}/application.ex"), ~r/Supervisor.start_link\(/
-
-      # No LiveView (in web_path)
-      assert_file web_path(@app, "mix.exs"), &refute(&1 =~ ~r":phoenix_live_view")
-      assert_file web_path(@app, "mix.exs"), &refute(&1 =~ ~r":floki")
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/templates/page/hero.html.leex"))
-
-      refute_file web_path(@app, "assets/js/live.js")
-
-      # No HTML
-      assert File.exists?(web_path(@app, "test/#{@app}_web/controllers"))
-      assert File.exists?(web_path(@app, "lib/#{@app}_web/controllers"))
-      assert File.exists?(web_path(@app, "lib/#{@app}_web/views"))
-      refute File.exists?(web_path(@app, "test/controllers/pager_controller_test.exs"))
-      refute File.exists?(web_path(@app, "test/views/layout_view_test.exs"))
-      refute File.exists?(web_path(@app, "test/views/page_view_test.exs"))
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/controllers/page_controller.ex"))
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/templates/layout/app.html.eex"))
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/templates/page/index.html.eex"))
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/views/layout_view.ex"))
-      refute File.exists?(web_path(@app, "lib/#{@app}_web/views/page_view.ex"))
-
-      assert_file web_path(@app, "mix.exs"), &refute(&1 =~ ~r":phoenix_html")
-      assert_file web_path(@app, "mix.exs"), &refute(&1 =~ ~r":phoenix_live_reload")
-      assert_file web_path(@app, "lib/#{@app}_web.ex"),
-                  &assert(&1 =~ "defp view_helpers do")
-      assert_file web_path(@app, "lib/#{@app}_web/endpoint.ex"),
-                  &refute(&1 =~ ~r"Phoenix.LiveReloader")
-      assert_file web_path(@app, "lib/#{@app}_web/endpoint.ex"),
-                  &refute(&1 =~ ~r"Phoenix.LiveReloader.Socket")
-      assert_file web_path(@app, "lib/#{@app}_web/views/error_view.ex"), ~r".json"
-      assert_file web_path(@app, "lib/#{@app}_web/router.ex"), &refute(&1 =~ ~r"pipeline :browser")
-    end
-  end
-
   test "new with no_dashboard" do
     in_tmp "new with no_dashboard", fn ->
       Mix.Tasks.Petal.New.run([@app, "--umbrella", "--no-dashboard"])
@@ -338,21 +264,6 @@ defmodule Mix.Tasks.Petal.New.UmbrellaTest do
       end
     end
   end
-
-  test "new with no_webpack" do
-    in_tmp "new with no_webpack", fn ->
-      Mix.Tasks.Petal.New.run([@app, "--umbrella", "--no-webpack"])
-
-      assert_file web_path(@app, ".gitignore")
-      assert_file( web_path(@app, ".gitignore"),  ~r/\n$/)
-      assert_file web_path(@app, "priv/static/css/app.css")
-      assert_file web_path(@app, "priv/static/favicon.ico")
-      assert_file web_path(@app, "priv/static/images/phoenix.png")
-      assert_file web_path(@app, "priv/static/js/phoenix.js")
-      assert_file web_path(@app, "priv/static/js/app.js")
-    end
-  end
-
   test "new with binary_id" do
     in_tmp "new with binary_id", fn ->
       Mix.Tasks.Petal.New.run([@app, "--umbrella", "--binary-id"])
@@ -361,9 +272,9 @@ defmodule Mix.Tasks.Petal.New.UmbrellaTest do
     end
   end
 
-  test "new with live no_dashboard" do
-    in_tmp "new with live no_dashboard", fn ->
-      Mix.Tasks.Petal.New.run([@app, "--umbrella", "--live", "--no-dashboard"])
+  test "new with PETAL no_dashboard" do
+    in_tmp "new with PETAL no_dashboard", fn ->
+      Mix.Tasks.Petal.New.run([@app, "--umbrella", "--no-dashboard"])
 
       assert_file web_path(@app, "mix.exs"), &refute(&1 =~ ~r":phoenix_live_dashboard")
 
@@ -379,9 +290,9 @@ defmodule Mix.Tasks.Petal.New.UmbrellaTest do
     end
   end
 
-  test "new with live" do
-    in_tmp "new with live", fn ->
-      Mix.Tasks.Petal.New.run([@app, "--umbrella", "--live"])
+  test "new with PETAL" do
+    in_tmp "new with PETAL", fn ->
+      Mix.Tasks.Petal.New.run([@app, "--umbrella"])
 
       refute_file web_path(@app, "lib/#{@app}_web/controllers/page_controller.ex")
 

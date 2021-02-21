@@ -30,14 +30,7 @@ defmodule Mix.Tasks.Petal.New do
       Please check the driver docs for more information
       and requirements. Defaults to "postgres".
 
-    * `--no-webpack` - do not generate webpack files
-      for static asset building. When choosing this
-      option, you will need to manually handle
-      JavaScript dependencies if building HTML apps
-
     * `--no-ecto` - do not generate Ecto files.
-
-    * `--no-html` - do not generate HTML views.
 
     * `--no-gettext` - do not generate gettext files.
 
@@ -73,10 +66,6 @@ defmodule Mix.Tasks.Petal.New do
 
       mix petal.new hello_world --module HelloWorld
 
-  Or without the HTML and JS bits (useful for APIs):
-
-      mix petal.new ~/Workspace/hello_world --no-html --no-webpack
-
   As an umbrella:
 
       mix petal.new hello --umbrella
@@ -101,9 +90,9 @@ defmodule Mix.Tasks.Petal.New do
   @version Mix.Project.config()[:version]
   @shortdoc "Creates a new Phoenix v#{@version} application"
 
-  @switches [dev: :boolean, webpack: :boolean, ecto: :boolean,
+  @switches [dev: :boolean, ecto: :boolean,
              app: :string, module: :string, web_module: :string,
-             database: :string, binary_id: :boolean, html: :boolean,
+             database: :string, binary_id: :boolean,
              gettext: :boolean, umbrella: :boolean, verbose: :boolean,
              dashboard: :boolean, install: :boolean]
 
@@ -174,7 +163,7 @@ defmodule Mix.Tasks.Petal.New do
       webpack_step = install_webpack(install?, project)
       Task.await(compile, :infinity)
 
-      if Project.webpack?(project) and !System.find_executable("npm") do
+      if !System.find_executable("npm") do
         print_webpack_info(project, generator)
       end
 
@@ -272,11 +261,11 @@ defmodule Mix.Tasks.Petal.New do
     Mix.shell().info """
     Start your Phoenix app with:
 
-        $ mix petal.server
+        $ mix phx.server
 
     You can also run your app inside IEx (Interactive Elixir) as:
 
-        $ iex -S mix petal.server
+        $ iex -S mix phx.server
     """
   end
 

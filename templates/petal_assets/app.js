@@ -12,7 +12,7 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
-<%= if @html do %>import "phoenix_html"<% end %>
+import "phoenix_html"
 import {Socket} from "phoenix"
 import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"

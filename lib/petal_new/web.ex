@@ -76,19 +76,13 @@ defmodule Petal.New.Web do
   def generate(%Project{} = project) do
     inject_umbrella_config_defaults(project)
 
-    Petal.New.Single.assert_live_switches!(project)
-
     copy_from project, __MODULE__, :new
 
     copy_from project, __MODULE__, :live
 
     if Project.gettext?(project), do: gen_gettext(project)
 
-    case {Project.webpack?(project), Project.html?(project)} do
-      {true, _}      -> Petal.New.Single.gen_webpack(project)
-      {false, true}  -> Petal.New.Single.gen_static(project)
-      {false, false} -> Petal.New.Single.gen_bare(project)
-    end
+    Petal.New.Single.gen_webpack(project)
 
     project
   end

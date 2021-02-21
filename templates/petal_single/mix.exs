@@ -40,11 +40,11 @@ defmodule <%= @app_module %>.MixProject do
       <%= @phoenix_dep %>,<%= if @ecto do %>
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.5"},
-      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %><%= if @html do %>
+      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %>
       {:phoenix_live_view, "~> 0.15.0"},
       {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},<% end %><%= if @dashboard do %>
+      {:phoenix_live_reload, "~> 1.2", only: :dev},<%= if @dashboard do %>
       {:phoenix_live_dashboard, "~> 0.4"},<% end %>
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},<%= if @gettext do %>
@@ -62,7 +62,7 @@ defmodule <%= @app_module %>.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"<%= if @ecto do %>, "ecto.setup"<% end %><%= if @webpack do %>, "cmd npm install --prefix assets"<% end %>]<%= if @ecto do %>,
+      setup: ["deps.get"<%= if @ecto do %>, "ecto.setup"<% end %>, "cmd npm install --prefix assets"]<%= if @ecto do %>,
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]<% end %>

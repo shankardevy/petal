@@ -213,103 +213,6 @@ defmodule Mix.Tasks.Petal.NewTest do
     end
   end
 
-  test "new without defaults" do
-    in_tmp "new without defaults", fn ->
-      Mix.Tasks.Petal.New.run([@app_name, "--no-html", "--no-webpack", "--no-ecto", "--no-gettext", "--no-dashboard"])
-
-      # No webpack
-      refute File.read!("petal_blog/.gitignore") |> String.contains?("/assets/node_modules/")
-      assert_file "petal_blog/.gitignore", ~r/\n$/
-      assert_file "petal_blog/config/dev.exs", ~r/watchers: \[\]/
-
-      # No webpack & No HTML
-      refute_file "petal_blog/priv/static/css/app.css"
-      refute_file "petal_blog/priv/static/favicon.ico"
-      refute_file "petal_blog/priv/static/images/phoenix.png"
-      refute_file "petal_blog/priv/static/js/phoenix.js"
-      refute_file "petal_blog/priv/static/js/app.js"
-
-      # No Ecto
-      config = ~r/config :petal_blog, PetalBlog.Repo,/
-      refute File.exists?("petal_blog/lib/petal_blog/repo.ex")
-      assert_file "petal_blog/lib/petal_blog_web/endpoint.ex", fn file ->
-        refute file =~ "plug Phoenix.Ecto.CheckRepoStatus, otp_app: :petal_blog"
-      end
-
-      assert_file "petal_blog/lib/petal_blog_web/telemetry.ex", fn file ->
-        refute file =~ "# Database Metrics"
-        refute file =~ "summary(\"petal_blog.repo.query.total_time\","
-      end
-
-      assert_file "petal_blog/.formatter.exs", fn file ->
-        assert file =~ "import_deps: [:phoenix]"
-        assert file =~ "inputs: [\"*.{ex,exs}\", \"{config,lib,test}/**/*.{ex,exs}\"]"
-        refute file =~ "subdirectories:"
-      end
-
-      assert_file "petal_blog/mix.exs", &refute(&1 =~ ~r":phoenix_ecto")
-
-      assert_file "petal_blog/config/config.exs", fn file ->
-        refute file =~ "config :petal_blog, :generators"
-        refute file =~ "ecto_repos:"
-      end
-
-      assert_file "petal_blog/config/dev.exs", fn file ->
-        refute file =~ config
-        assert file =~ "config :phoenix, :plug_init_mode, :runtime"
-      end
-      assert_file "petal_blog/config/test.exs", &refute(&1 =~ config)
-      assert_file "petal_blog/config/runtime.exs", &refute(&1 =~ config)
-      assert_file "petal_blog/lib/petal_blog_web.ex", &refute(&1 =~ ~r"alias PetalBlog.Repo")
-
-      # No gettext
-      refute_file "petal_blog/lib/petal_blog_web/gettext.ex"
-      refute_file "petal_blog/priv/gettext/en/LC_MESSAGES/errors.po"
-      refute_file "petal_blog/priv/gettext/errors.pot"
-      assert_file "petal_blog/mix.exs", &refute(&1 =~ ~r":gettext")
-      assert_file "petal_blog/lib/petal_blog_web.ex", &refute(&1 =~ ~r"import AmsMockWeb.Gettext")
-      assert_file "petal_blog/lib/petal_blog_web/views/error_helpers.ex", &refute(&1 =~ ~r"gettext")
-      assert_file "petal_blog/config/dev.exs", &refute(&1 =~ ~r"gettext")
-
-      # No HTML
-      assert File.exists?("petal_blog/test/petal_blog_web/controllers")
-
-      assert File.exists?("petal_blog/lib/petal_blog_web/controllers")
-      assert File.exists?("petal_blog/lib/petal_blog_web/views")
-
-      refute File.exists? "petal_blog/test/web/controllers/pager_controller_test.exs"
-      refute File.exists? "petal_blog/test/views/layout_view_test.exs"
-      refute File.exists? "petal_blog/test/views/page_view_test.exs"
-      refute File.exists? "petal_blog/lib/petal_blog_web/controllers/page_controller.ex"
-      refute File.exists? "petal_blog/lib/petal_blog_web/templates/layout/app.html.eex"
-      refute File.exists? "petal_blog/lib/petal_blog_web/templates/page/index.html.eex"
-      refute File.exists? "petal_blog/lib/petal_blog_web/views/layout_view.ex"
-      refute File.exists? "petal_blog/lib/petal_blog_web/views/page_view.ex"
-
-      assert_file "petal_blog/mix.exs", &refute(&1 =~ ~r":phoenix_html")
-      assert_file "petal_blog/mix.exs", &refute(&1 =~ ~r":phoenix_live_reload")
-      assert_file "petal_blog/lib/petal_blog_web.ex",
-                  &assert(&1 =~ "defp view_helpers do")
-      assert_file "petal_blog/lib/petal_blog_web/endpoint.ex",
-                  &refute(&1 =~ ~r"Phoenix.LiveReloader")
-      assert_file "petal_blog/lib/petal_blog_web/endpoint.ex",
-                  &refute(&1 =~ ~r"Phoenix.LiveReloader.Socket")
-      assert_file "petal_blog/lib/petal_blog_web/views/error_view.ex", ~r".json"
-      assert_file "petal_blog/lib/petal_blog_web/router.ex", &refute(&1 =~ ~r"pipeline :browser")
-
-      # No Dashboard
-      assert_file "petal_blog/lib/petal_blog_web/endpoint.ex", fn file ->
-        refute file =~ ~s|socket "/live"|
-        refute file =~ ~s|plug Phoenix.LiveDashboard.RequestLogger|
-      end
-
-      assert_file "petal_blog/lib/petal_blog_web/router.ex", fn file ->
-        refute file =~ "live_dashboard"
-        refute file =~ "import Phoenix.LiveDashboard.Router"
-      end
-    end
-  end
-
   test "new with no_dashboard" do
     in_tmp "new with no_dashboard", fn ->
       Mix.Tasks.Petal.New.run([@app_name, "--no-dashboard"])
@@ -350,20 +253,6 @@ defmodule Mix.Tasks.Petal.NewTest do
     end
   end
 
-  test "new with no_webpack" do
-    in_tmp "new with no_webpack", fn ->
-      Mix.Tasks.Petal.New.run([@app_name, "--no-webpack"])
-
-      assert_file "petal_blog/.gitignore"
-      assert_file "petal_blog/.gitignore", ~r/\n$/
-      assert_file "petal_blog/priv/static/css/app.css"
-      assert_file "petal_blog/priv/static/favicon.ico"
-      assert_file "petal_blog/priv/static/images/phoenix.png"
-      assert_file "petal_blog/priv/static/js/phoenix.js"
-      assert_file "petal_blog/priv/static/js/app.js"
-    end
-  end
-
   test "new with binary_id" do
     in_tmp "new with binary_id", fn ->
       Mix.Tasks.Petal.New.run([@app_name, "--binary-id"])
@@ -371,9 +260,9 @@ defmodule Mix.Tasks.Petal.NewTest do
     end
   end
 
-  test "new with live" do
-    in_tmp "new with live", fn ->
-      Mix.Tasks.Petal.New.run([@app_name, "--live"])
+  test "new petal" do
+    in_tmp "new petal", fn ->
+      Mix.Tasks.Petal.New.run([@app_name])
       assert_file "petal_blog/mix.exs", &assert(&1 =~ ~r":phoenix_live_view")
       assert_file "petal_blog/mix.exs", &assert(&1 =~ ~r":floki")
 

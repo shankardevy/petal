@@ -37,17 +37,6 @@ defmodule Petal.New.Single do
     {:eex,  "petal_gettext/errors.pot",               :project, "priv/gettext/errors.pot"}
   ]
 
-  template :html, [
-    {:eex, "petal_web/controllers/page_controller.ex",         :project, "lib/:lib_web_name/controllers/page_controller.ex"},
-    {:eex, "petal_web/templates/layout/app.html.eex",          :project, "lib/:lib_web_name/templates/layout/app.html.eex"},
-    {:eex, "petal_web/templates/page/index.html.eex",          :project, "lib/:lib_web_name/templates/page/index.html.eex"},
-    {:eex, "petal_web/views/layout_view.ex",                   :project, "lib/:lib_web_name/views/layout_view.ex"},
-    {:eex, "petal_web/views/page_view.ex",                     :project, "lib/:lib_web_name/views/page_view.ex"},
-    {:eex, "petal_test/controllers/page_controller_test.exs",  :project, "test/:lib_web_name/controllers/page_controller_test.exs"},
-    {:eex, "petal_test/views/layout_view_test.exs",            :project, "test/:lib_web_name/views/layout_view_test.exs"},
-    {:eex, "petal_test/views/page_view_test.exs",              :project, "test/:lib_web_name/views/page_view_test.exs"},
-  ]
-
   template :live, [
     {:eex, "petal_live/templates/layout/root.html.leex",       :project, "lib/:lib_web_name/templates/layout/root.html.leex"},
     {:eex, "petal_live/templates/layout/app.html.leex",        :project, "lib/:lib_web_name/templates/layout/app.html.eex"},
@@ -67,16 +56,6 @@ defmodule Petal.New.Single do
     {:eex,  "petal_ecto/data_case.ex",         :app, "test/support/data_case.ex"},
   ]
 
-  template :webpack, [
-    {:eex,  "petal_assets/webpack.config.js", :web, "assets/webpack.config.js"},
-    {:text, "petal_assets/babelrc",           :web, "assets/.babelrc"},
-    {:eex,  "petal_assets/app.js",            :web, "assets/js/app.js"},
-    {:eex,  "petal_assets/app.scss",          :web, "assets/css/app.scss"},
-    {:eex,  "petal_assets/socket.js",         :web, "assets/js/socket.js"},
-    {:eex,  "petal_assets/package.json",      :web, "assets/package.json"},
-    {:keep, "petal_assets/vendor",            :web, "assets/vendor"},
-  ]
-
   template :webpack_live, [
     {:eex,  "petal_assets/tailwind.config.js", :web, "assets/tailwind.config.js"},
     {:eex,  "petal_assets/postcss.config.js", :web, "assets/postcss.config.js"},
@@ -87,8 +66,6 @@ defmodule Petal.New.Single do
     {:eex,  "petal_assets/package.json",      :web, "assets/package.json"},
     {:keep, "petal_assets/vendor",            :web, "assets/vendor"},
   ]
-
-  template :bare, []
 
   template :static, [
     {:text, "petal_static/app.js",      :web, "priv/static/js/app.js"},
@@ -127,8 +104,6 @@ defmodule Petal.New.Single do
   end
 
   def generate(%Project{} = project) do
-    assert_live_switches!(project)
-
     copy_from project, __MODULE__, :new
 
     if Project.ecto?(project), do: gen_ecto(project)
@@ -137,9 +112,7 @@ defmodule Petal.New.Single do
 
     if Project.gettext?(project), do: gen_gettext(project)
 
-    case {Project.webpack?(project), Project.html?(project)} do
-      {true, _}      -> gen_webpack(project)
-    end
+    gen_webpack(project)
 
     project
   end
@@ -175,13 +148,4 @@ defmodule Petal.New.Single do
     end
   end
 
-  def gen_bare(%Project{} = project) do
-    copy_from project, __MODULE__, :bare
-  end
-
-  def assert_live_switches!(project) do
-    unless Project.html?(project) and Project.webpack?(project) do
-      raise "cannot generate --live project with --no-html or --no-webpack. LiveView requires HTML and webpack"
-    end
-  end
 end

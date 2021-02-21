@@ -1,5 +1,5 @@
 defmodule <%= @web_namespace %>.Router do
-  use <%= @web_namespace %>, :router<%= if @html do %>
+  use <%= @web_namespace %>, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,11 +8,11 @@ defmodule <%= @web_namespace %>.Router do
     plug :put_root_layout, {<%= @web_namespace %>.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-  end<% end %>
+  end
 
   pipeline :api do
     plug :accepts, ["json"]
-  end<%= if @html do %>
+  end
 
   scope "/", <%= @web_namespace %> do
     pipe_through :browser
@@ -23,11 +23,8 @@ defmodule <%= @web_namespace %>.Router do
   # Other scopes may use custom stacks.
   # scope "/api", <%= @web_namespace %> do
   #   pipe_through :api
-  # end<% else %>
-
-  scope "/api", <%= @web_namespace %> do
-    pipe_through :api
-  end<% end %><%= if @dashboard do %>
+  # end
+  <%= if @dashboard do %>
 
   # Enables LiveDashboard only for development
   #
@@ -39,9 +36,9 @@ defmodule <%= @web_namespace %>.Router do
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
-    scope "/" do<%= if @html do %>
-      pipe_through :browser<% else %>
-      pipe_through [:fetch_session, :protect_from_forgery]<% end %>
+    scope "/" do
+      pipe_through :browser
+      pipe_through [:fetch_session, :protect_from_forgery]
       live_dashboard "/dashboard", metrics: <%= @web_namespace %>.Telemetry
     end
   end<% end %>

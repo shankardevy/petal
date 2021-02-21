@@ -11,7 +11,7 @@ config :<%= @web_app_name %>, <%= @endpoint_module %>,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: <%= if @webpack do %>[
+  watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",
       "--mode",
@@ -19,7 +19,7 @@ config :<%= @web_app_name %>, <%= @endpoint_module %>,
       "--watch-stdin",
       cd: Path.expand("../apps/<%= @web_app_name %>/assets", __DIR__)
     ]
-  ]<% else %>[]<% end %>
+  ]
 
 # ## SSL Support
 #
@@ -43,7 +43,7 @@ config :<%= @web_app_name %>, <%= @endpoint_module %>,
 #
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
-# different ports.<%= if @html do %>
+# different ports.
 
 # Watch static and templates for browser reloading.
 config :<%= @web_app_name %>, <%= @endpoint_module %>,
@@ -54,4 +54,4 @@ config :<%= @web_app_name %>, <%= @endpoint_module %>,
       ~r"lib/<%= @web_app_name %>/(live|views)/.*(ex)$",
       ~r"lib/<%= @web_app_name %>/templates/.*(eex)$"
     ]
-  ]<% end %>
+  ]

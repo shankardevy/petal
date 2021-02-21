@@ -59,6 +59,6 @@ defmodule Mix.Tasks.Petal.New.Ecto do
       Mix.raise "The ecto task can only be run within an umbrella's apps directory"
     end
 
-    Mix.Tasks.Petal.New.run(args ++ ["--no-webpack", "--ecto"], Petal.New.Ecto, :app_path)
+    Mix.Tasks.Petal.New.run(args ++ ["--ecto"], Petal.New.Ecto, :app_path)
   end
 end

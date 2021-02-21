@@ -164,11 +164,8 @@ defmodule Petal.New.Generator do
   def put_binding(%Project{opts: opts} = project) do
     db = Keyword.get(opts, :database, "postgres")
     ecto = Keyword.get(opts, :ecto, true)
-    html = Keyword.get(opts, :html, true)
-    live = Keyword.get(opts, :live, false)
     dashboard = Keyword.get(opts, :dashboard, true)
     gettext = Keyword.get(opts, :gettext, true)
-    webpack = Keyword.get(opts, :webpack, true)
     dev = Keyword.get(opts, :dev, false)
     phoenix_path = phoenix_path(project, dev)
 
@@ -211,10 +208,7 @@ defmodule Petal.New.Generator do
       signing_salt: random_string(8),
       lv_signing_salt: random_string(8),
       in_umbrella: project.in_umbrella?,
-      webpack: webpack,
       ecto: ecto,
-      html: html,
-      live: live,
       dashboard: dashboard,
       gettext: gettext,
       adapter_app: adapter_app,

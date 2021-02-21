@@ -19,17 +19,6 @@ defmodule Mix.Tasks.Petal.New.EctoTest do
            "Creates a new Ecto project within an umbrella project."
   end
 
-  test "new with barebones umbrella" do
-    in_tmp_umbrella_project "new with barebones umbrella", fn ->
-      files = ~w[../config/dev.exs ../config/test.exs ../config/prod.exs ../config/runtime.exs]
-      Enum.each(files, &File.rm/1)
-
-      assert_file "../config/config.exs", &refute(&1 =~ ~S[import_config "#{config_env()}.exs"])
-      Mix.Tasks.Petal.New.Ecto.run([@app_name])
-      assert_file "../config/config.exs", &assert(&1 =~ ~S[import_config "#{config_env()}.exs"])
-    end
-  end
-
   test "new outside umbrella", config do
     in_tmp config.test, fn ->
       assert_raise Mix.Error, ~r"The ecto task can only be run within an umbrella's apps directory", fn ->
